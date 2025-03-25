@@ -1,0 +1,54 @@
+﻿# Samba Configuration Parameters (smb.conf)
+
+Parameter                        | Description
+---------------------------------|--------------------------------------------------
+[global]                         | Defines global settings for Samba
+workgroup = WORKGROUP            | Sets the workgroup or domain name
+server string = Samba Server     | Describes the Samba server
+netbios name = SERVER_NAME       | Sets the NetBIOS name of the server
+log file = /var/log/samba/log.%m | Defines the location of log files
+max log size = 1000              | Limits log file size in KB
+security = user                  | Defines authentication mode (user, share, etc.)
+encrypt passwords = yes          | Enables encrypted password authentication
+smb passwd file = /etc/samba/smbpasswd | Specifies the Samba password file
+guest account = nobody           | Defines the guest user
+interfaces = eth0 lo             | Sets network interfaces for Samba to listen on
+bind interfaces only = yes       | Forces Samba to listen only on specified interfaces
+hosts allow = 192.168.1.0/24     | Restricts access to specific IP ranges
+hosts deny = ALL                 | Denies access to all other hosts
+load printers = yes              | Enables printer sharing
+printing = cups                  | Specifies the printing system (CUPS, LPR, etc.)
+printcap name = /etc/printcap    | Defines the printer capability file
+log level = 2                    | Sets the verbosity of log messages
+wins support = yes               | Enables WINS server support
+dns proxy = no                   | Disables DNS proxy
+map to guest = Bad User          | Maps unknown users to guest
+hide dot files = yes             | Hides files starting with a dot (.)
+create mask = 0777               | Sets permissions for new files
+directory mask = 0777            | Sets permissions for new directories
+public = yes                     | Makes a share public (no authentication)
+browseable = yes                 | Allows the share to be visible in network browsing
+writable = yes                   | Allows users to write to the share
+force user = nobody              | Forces all access to be under a specific user
+force group = users              | Forces all access to be under a specific group
+valid users = user1 user2        | Restricts access to specific users
+write list = user1 user2         | Defines users with write access
+admin users = admin              | Grants administrative privileges to specified users
+readonly = no                    | Makes a share writable
+path = /srv/samba/share          | Specifies the directory for the share
+available = yes                  | Controls whether the share is available
+max connections = 10             | Limits the number of concurrent connections
+deadtime = 15                    | Disconnects idle clients after X minutes
+socket options = TCP_NODELAY SO_RCVBUF=8192 SO_SNDBUF=8192 | Network tuning options
+oplocks = yes                    | Enables opportunistic locking for files
+veto files = /*.mp3/*.avi/       | Blocks access to specified file types
+delete veto files = yes          | Allows deletion of vetoed files
+
+# Example Share Definition
+[shared]
+  path = /srv/samba/shared
+  browseable = yes
+  writable = yes
+  guest ok = no
+  valid users = user1, user2
+

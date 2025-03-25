@@ -1,0 +1,23 @@
+# Modify smb.conf Inside a Running Docker Container
+
+## 1. Enter the Running Container
+docker exec -it samba-server bash
+# This opens an interactive shell inside the Samba container.
+
+## 2. Edit the smb.conf File
+nano /etc/samba/smb.conf
+# Opens the Samba configuration file for editing.
+
+## 3. Make Necessary Changes
+# Modify any parameter, such as:
+# workgroup = MYWORKGROUP
+# security = user
+# save and exit nano (CTRL+X, Y, Enter)
+
+## 4. Reload Samba Configuration
+smbcontrol all reload-config
+# Reloads Samba settings without restarting the container.
+
+## 5. Restart the Container (if needed)
+docker restart samba-server
+# Applies the changes if reloading doesn't work.
