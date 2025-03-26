@@ -1,0 +1,48 @@
+WEB: Wide Open Doors
+
+Muammo:
+- Tajovuzkorlar veb-sayt serveriga ruxsatsiz kirib, shaxsiy ma’lumotlarni ko‘chirib olish yoki o‘zgartirishmoqda.
+- SSH porti va foydalanuvchi paroli o‘zgartirilgan bo‘lsa ham, tajovuzkorlar hali ham serverga kirish imkoniyatiga ega.
+- Xavfsizlik teshigi mavjud bo‘lib, bu ma’lumotlarning o‘g‘irlanishiga yoki buzilishiga sabab bo‘lishi mumkin.
+
+Yechim:
+
+1. **PHP zararli fayllarni aniqlash va o‘chirish** (WordPress yuklanish katalogida):
+```php
+$upload_dir = 'wp-content/uploads/files/';
+$dangerous_files = ['shl.php', 'shell.php', 'cmd.php'];
+
+foreach ($dangerous_files as $file) {
+    $file_path = $upload_dir . $file;
+    if (file_exists($file_path)) {
+        unlink($file_path);
+        echo "🔥 Zararli fayl o‘chirildi: $file_path";
+    }
+}
+```
+
+2. **Uploads katalogida PHP bajarilishini bloklash (`.htaccess` fayl orqali)**:
+```
+<FilesMatch "\.(php|php5|phtml)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+```
+
+3. **SSH xavfsizligini ta’minlash (`sshd_config` sozlamalari)**:
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+- Portni o‘zgartirish va root foydalanuvchiga kirishni taqiqlash:
+```
+Port 2222
+PermitRootLogin no
+AllowUsers myuser
+```
+
+Xulosa:
+- **Zararli PHP fayllarni avtomatik topish va o‘chirish**
+- **Uploads katalogida PHP bajarilishini bloklash**
+- **SSH xavfsizligini kuchaytirish**
+
+⚠ **Server xavfsizligini ta’minlash uchun bu chora-tadbirlarni amalga oshirish muhim!**

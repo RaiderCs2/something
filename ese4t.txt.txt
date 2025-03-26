@@ -1,0 +1,192 @@
+Quyida har bir mavzuni kengroq tushuntirib, amaliy kodlar bilan yoritib beraman.
+
+1. Access Log
+Access log – bu veb-serverlarga kelayotgan so‘rovlar tarixi saqlanadigan jurnal. U foydalanuvchi IP-manzillari, so‘rov vaqtlari, HTTP status kodlari, brauzer ma’lumotlari kabi muhim tafsilotlarni o‘z ichiga oladi.
+
+Muhim texnologiyalar:
+Apache HTTP Server (access.log)
+
+Nginx (access.log)
+
+GoAccess, AWStats – loglarni tahlil qilish vositalari
+
+Fail2Ban – avtomatik bloklash
+
+Iptables – tarmoq trafikini nazorat qilish
+
+Amaliy misollar:
+Apache/Nginx loglarini ko‘rish
+bash
+Копировать
+Редактировать
+tail -f /var/log/apache2/access.log  # Apache loglarini ko‘rish
+tail -f /var/log/nginx/access.log    # Nginx loglarini ko‘rish
+IP bo‘yicha filtrlash
+bash
+Копировать
+Редактировать
+grep "192.168.1.10" /var/log/nginx/access.log
+iptables orqali muayyan IP'ni bloklash
+bash
+Копировать
+Редактировать
+iptables -A INPUT -s 192.168.1.10 -j DROP
+2. Chiqib ketayotgan sirlar
+Bu xavfsizlik buzilishlari odatda loglarda yoki noto‘g‘ri konfiguratsiya natijasida maxfiy ma’lumotlarning ochilib qolishi bilan bog‘liq.
+
+Muhim texnologiyalar:
+GitLeaks, TruffleHog – koddagi sirlarni topish
+
+Logrotate – loglarni boshqarish
+
+Burp Suite – veb-xavfsizlik skaneri
+
+grep, sed, awk – loglar orqali qidirish
+
+Amaliy misollar:
+Kod ichidagi API kalitlarni topish
+bash
+Копировать
+Редактировать
+grep -r "API_KEY" /var/www/html/
+Loglarda parol saqlanmaganligini tekshirish
+bash
+Копировать
+Редактировать
+grep -i "password" /var/log/syslog
+Git repoda sirlarni tekshirish (GitLeaks)
+bash
+Копировать
+Редактировать
+gitleaks detect --source . --verbose
+3. PowerShell skript
+PowerShell – Windows tizimlarini avtomatlashtirish uchun ishlatiladigan kuchli vosita. Xavfsizlik nuqtai nazaridan, u ekspluatatsiyalar uchun ham ishlatilishi mumkin.
+
+Muhim texnologiyalar:
+PowerShell 7+
+
+Windows Defender ATP
+
+Sysmon – tizim monitoringi
+
+Applocker – dastur ishga tushishini cheklash
+
+Amaliy misollar:
+Faol jarayonlarni tekshirish
+powershell
+Копировать
+Редактировать
+Get-Process | Sort-Object CPU -Descending
+Loglarni tekshirish
+powershell
+Копировать
+Редактировать
+Get-EventLog -LogName Security -Newest 10
+Kerberos chiptalarini tekshirish (Kerberoasting)
+powershell
+Копировать
+Редактировать
+Invoke-Kerberoast
+4. FTP (File Transfer Protocol)
+FTP – fayllarni serverga yuklash yoki yuklab olish uchun ishlatiladigan eski protokollardan biri. Agar noto‘g‘ri konfiguratsiya qilinsa, hujumlarga moyil bo‘lishi mumkin.
+
+Muhim texnologiyalar:
+vsftpd, ProFTPD – FTP serverlari
+
+SFTP (Secure FTP) – xavfsiz FTP alternativasi
+
+Wireshark – tarmoq trafikini tahlil qilish
+
+Fail2Ban – FTP hujumlarini bloklash
+
+Amaliy misollar:
+FTP serverga ulanish
+bash
+Копировать
+Редактировать
+ftp 192.168.1.100
+FTP seanslarini yozib olish (tcpdump)
+bash
+Копировать
+Редактировать
+tcpdump -i eth0 port 21 -w ftp_traffic.pcap
+Iptables orqali FTP trafikni cheklash
+bash
+Копировать
+Редактировать
+iptables -A INPUT -p tcp --dport 21 -j DROP
+5. Soxta salom (Fake Hello Attack)
+Bu hujum serverni aldash yoki noto‘g‘ri autentifikatsiya jarayonidan foydalanish orqali amalga oshiriladi.
+
+Muhim texnologiyalar:
+Wireshark, Tcpdump – tarmoq tahlili
+
+ModSecurity – veb-xavfsizlik devori
+
+Honeypotlar – hujumlarni kuzatish uchun
+
+Suricata, Snort – IDS/IPS tizimlari
+
+Amaliy misollar:
+Wireshark bilan noto‘g‘ri autentifikatsiyalarni tekshirish
+bash
+Копировать
+Редактировать
+tshark -Y "http.authbasic" -r capture.pcap
+Apache/Nginx bilan noto‘g‘ri so‘rovlarni bloklash
+bash
+Копировать
+Редактировать
+iptables -A INPUT -p tcp --dport 80 -m string --string "FakeHello" --algo bm -j DROP
+6. Yo‘qolgan fleshka (Lost USB Attack)
+Yo‘qolgan fleshkalar odatda zararli dasturlar yoki ekspluatatsiyalarni o‘z ichiga olishi mumkin.
+
+Muhim texnologiyalar:
+USBGuard – USB qurilmalarni boshqarish
+
+Sysmon, Event Viewer – loglarni tekshirish
+
+Antivirus va EDR tizimlari
+
+Amaliy misollar:
+USB orqali qo‘shilgan qurilmalarni tekshirish
+bash
+Копировать
+Редактировать
+lsusb
+dmesg | grep -i usb
+USBGuard orqali noma’lum qurilmalarni bloklash
+bash
+Копировать
+Редактировать
+usbguard list-devices
+usbguard deny --device 1
+PowerShell bilan USB tarixini ko‘rish
+powershell
+Копировать
+Редактировать
+Get-WinEvent -LogName Microsoft-Windows-DriverFrameworks-UserMode/Operational | Select-Object TimeCreated, ID, Message
+7. Yutuq 2025 (Cybersecurity Challenges)
+Bu mavzu umumiy kiberxavfsizlik tahdidlari va texnologiyalarini qamrab olishi mumkin.
+
+Muhim texnologiyalar:
+SOC (Security Operations Center)
+
+SIEM (Splunk, ELK)
+
+XDR (Extended Detection & Response)
+
+Zero Trust Security Model
+
+Amaliy misollar:
+SIEM tizimida xavfsizlik hodisalarini tekshirish
+bash
+Копировать
+Редактировать
+grep "Failed login" /var/log/auth.log
+ModSecurity bilan WAF qoidalarini o‘rnatish
+bash
+Копировать
+Редактировать
+SecRule REQUEST_URI "@contains /admin" "id:1001,deny,status:403"
+Bu mavzularga qo‘shimcha qilish kerak bo‘lsa yoki ba’zi joylarini chuqurroq tushuntirib berishimni istasangiz, xabar bering! 🚀

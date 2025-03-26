@@ -1,0 +1,50 @@
+WEB: Anonfile
+
+Muammo:
+- Tajovuzkorlar veb-saytdagi zaiflikdan foydalanib, serverdagi ma’lumotlarni o‘qish imkoniyatiga ega bo‘lishmoqda.
+- Ular bu orqali hujum turlarini ko‘paytirib, serverga kirish imkoniyatlarini yanada oshirishlari mumkin.
+- Bu zaiflik odatda fayl yuklash va bajarish mexanizmlarida bo‘lishi mumkin.
+
+Yechim:
+1. **Fayl yuklashni cheklash** (faqat ruxsat berilgan fayl turlari):
+```php
+$allowed_types = ['jpg', 'png', 'pdf'];
+$file_ext = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
+if (!in_array($file_ext, $allowed_types)) {
+    die("❌ Xatolik: Ushbu turdagi fayl yuklanishi taqiqlangan!");
+}
+```
+
+2. **MIME turini tekshirish**:
+```php
+$mime_type = mime_content_type($_FILES["file"]["tmp_name"]);
+$allowed_mime_types = ['image/jpeg', 'image/png', 'application/pdf'];
+if (!in_array($mime_type, $allowed_mime_types)) {
+    die("❌ Xatolik: Fayl MIME turi noto‘g‘ri!");
+}
+```
+
+3. **Fayl nomlarini filtrlash**:
+```php
+$file_name = preg_replace("/[^a-zA-Z0-9\._-]/", "", $_FILES["file"]["name"]);
+```
+
+4. **PHP fayllarni yuklashni bloklash uchun .htaccess** (`uploads/` katalogida):
+```
+<FilesMatch "\.(php|php5|phtml)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+```
+
+5. **Fayl katalogi huquqlarini cheklash** (Linux):
+```bash
+chmod 644 uploads/
+chown www-data:www-data uploads/
+```
+
+Xulosa:
+- Fayl yuklash xavfsiz bo‘lishi uchun MIME turi, kengaytma va fayl nomlari tekshirilishi shart.
+- PHP fayllarning bajarilishini oldini olish kerak.
+- Serverda kerakli ruxsatlar o‘rnatilishi zarur.
+

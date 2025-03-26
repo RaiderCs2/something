@@ -1,0 +1,24 @@
+DSM: Unseen Resource
+
+Muammo:
+- Veb-saytda zaiflik mavjud bo‘lib, foydalanuvchilar boshqa foydalanuvchilarning ma’lumotlarini ko‘rish, o‘zgartirish yoki o‘chirish imkoniyatiga ega bo‘lib qolmoqda.
+- Bu, ehtimol, autentifikatsiya yoki ruxsat (authorization) mexanizmining noto‘g‘ri ishlashi bilan bog‘liq.
+
+Yechim:
+- "app.py" faylida foydalanuvchilarning rollarini to‘g‘ri tekshirish va xavfsizlik mexanizmlarini joriy etish kerak.
+- Bu odatda RBAC (Role-Based Access Control) yoki shunga o‘xshash mexanizmlar bilan amalga oshiriladi.
+
+Nima qilish kerak?
+1. Ruxsatni tekshirish (Authorization Check)
+   if current_user.role != "admin":
+       abort(403)  # Ruxsat berilmagan
+
+2. Foydalanuvchi identifikatsiyasini to‘g‘ri ishlatish
+   if current_user.id != requested_user_id and not current_user.is_admin:
+       abort(403)
+
+3. Token yoki sessiya asosida tekshirish (JWT, Flask-Login va boshqalar)
+   Har bir foydalanuvchi o‘zining tokeni yoki sessiyasi orqali aniqlanishi lozim.
+
+Xulosa:
+Foydalanuvchi ruxsatlarini tekshirish va har bir resursga kirish huquqini aniq belgilash orqali bu zaiflikni bartaraf etish mumkin.

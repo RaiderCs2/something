@@ -1,0 +1,27 @@
+EDU: LEAKED LINK
+
+Muammo:
+- WordPress tizimida foydalanuvchilar parolni unutganda, uni tiklash jarayonida parolni tiklash havolasi ekranga chiqariladi.
+- Havola foydalanuvchining elektron pochtasiga yuborilmaydi.
+- Natijada, tajovuzkorlar ushbu havolani ko‘rib, foydalanuvchining akkauntiga ruxsatsiz kira oladi.
+
+Fayl manzili:
+/var/www/html/wp-content/themes/blocksy/functions.php
+
+Zaif kod:
+add_filter('retrieve_password_message', 'ctf_display_reset_link', 10, 4);
+
+function ctf_display_reset_link($message, $key, $user_login, $user_data) {
+    $reset_link = network_site_url('wp-login.php?action=rp&key='.$key.'&login='.rawurlencode($user_login));
+    
+    echo '<div>Password reset link: <a href="'.$reset_link.'">'.$reset_link.'</a></div>';
+
+    exit;
+}
+
+Nima qilish kerak?
+✅ Ushbu zaif kodni functions.php faylidan olib tashlash kerak.
+✅ Parolni tiklash havolasi faqat email orqali yuborilishi kerak.
+✅ Havolani ekranga chiqarmaslik zarur.
+
+Xavfsizlikka jiddiy ta’sir qiladi, chunki har kim bu havoladan foydalanib, boshqa odamning akkauntiga kira olishi mumkin.

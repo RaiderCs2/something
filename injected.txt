@@ -1,0 +1,7 @@
+MasterStudy LMS - bu WordPress uchun mo‘ljallangan kuchli Learning Management System (LMS) plaginidir. Ushbu plagin yordamida onlayn ta’lim platformalarini yaratish, kurslarni boshqarish va foydalanuvchilar uchun qulay interfeys taqdim etish mumkin. MasterStudy LMS ta’lim olishni raqamli makon orqali osonlashtiradi va foydalanuvchilarga kurslar, testlar, dars rejalari kabi funksiyalarni qo‘llab-quvvatlaydi.
+
+MasterStudy LMS plaginida, ayniqsa kurslar sahifasidagi login qismida xavfsizlik nuqsoni mavjud bo‘lib, kod ichida quyidagi qism qoldirilgan:
+
+eval('$user_login = `' . $data['user_login'] . '`;');
+
+Eval() funksiyasi odatda ishlatilmaydi. Ko‘pincha mutaxassislar eval() funksiyasini xavfsizlik jihatdan yomon deb hisoblashadi, chunki u kodni injeksiya hujumlariga ochiq qiladi. Masalan, foydalanuvchi kiritgan nohaq ma’lumotlar eval() orqali bajarilsa, bu tizimni buzish yoki zararli kodni bajarishga imkon beradi.

@@ -1,0 +1,40 @@
+"Data Gate" tushuntirishi
+
+Muammo tafsilotlari:
+- Veb-loyihalar odatda ma’lumotlar bazasiga ulanish orqali ishlaydi.
+- Agar bazaga noto‘g‘ri xavfsizlik sozlamalari qo‘llangan bo‘lsa, tajovuzkorlar shaxsiy ma’lumotlarni ko‘rishi yoki o‘zgartirishi mumkin.
+- Ayniqsa, `root` foydalanuvchisi parolini noto‘g‘ri boshqarish hujumchilarga butun bazani egallash imkoniyatini beradi.
+
+Yechimlar:
+1. `root` foydalanuvchisini o‘chirib tashlash yoki unga cheklovlar qo‘yish
+2. Barcha ulanishlar uchun alohida foydalanuvchilar va minimal ruxsatlarni qo‘llash
+3. Parollarni doimiy ravishda yangilash va ularni shifrlangan holda saqlash
+
+Amaliy kodlar:
+
+1. `root` foydalanuvchisini bloklash va yangi foydalanuvchi yaratish:
+---------------------------------------------------------------
+ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'YangiKuchliParol!';
+FLUSH PRIVILEGES;
+
+CREATE USER 'safe_user'@'%' IDENTIFIED BY 'KuchliParol123!';
+GRANT SELECT, INSERT, UPDATE ON mydatabase.* TO 'safe_user'@'%';
+FLUSH PRIVILEGES;
+---------------------------------------------------------------
+
+2. `docker-compose.yml` faylida ochiq portlarni yopish:
+---------------------------------------------------------------
+version: '3.8'
+services:
+  db:
+    image: mysql:latest
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecurepassword
+---------------------------------------------------------------
+
+Xulosa:
+✅ `root` foydalanuvchisini bloklash yoki almashtirish zarur
+✅ Docker Compose-dagi portlarni cheklash xavfsizlikni oshiradi
+✅ Foydalanuvchilarga minimal ruxsat berish kerak

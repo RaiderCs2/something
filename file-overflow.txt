@@ -1,0 +1,50 @@
+WEB: File Overflow
+
+Muammo:
+- Veb-saytning "Bog‘lanish" sahifasi orqali sayt administratorlari bilan bog‘lanish imkoniyati mavjud.
+- Foydalanuvchilar ismi, familiyasi, pochta manzili, telefon raqami va fayl yuklash funksiyasi orqali bog‘lanishi mumkin.
+- Fayl yuklash jarayonida filtrlar yoki xavfsizlik tekshiruvlari bo‘lmasa, tajovuzkorlar zararli fayllarni yuklab, serverga kirishi mumkin.
+
+Yechimlar:
+1. Fayl yuklashni faqat xavfsiz turlarga cheklash (PHP):
+```php
+$allowed_types = ['image/jpeg', 'image/png', 'application/pdf'];
+$upload_dir = 'uploads/';
+
+if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+    $file_type = mime_content_type($_FILES['file']['tmp_name']);
+    
+    if (in_array($file_type, $allowed_types)) {
+        move_uploaded_file($_FILES['file']['tmp_name'], $upload_dir . basename($_FILES['file']['name']));
+        echo "✅ Fayl yuklandi!";
+    } else {
+        echo "⛔ Ushbu turdagi faylni yuklash mumkin emas!";
+    }
+} else {
+    echo "❌ Fayl yuklashda xatolik yuz berdi!";
+}
+```
+
+2. Fayl nomini avtomatik ravishda o‘zgartirish:
+```php
+$new_name = uniqid() . "." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+move_uploaded_file($_FILES['file']['tmp_name'], $upload_dir . $new_name);
+```
+
+3. `.htaccess` orqali yuklangan fayllarning bajarilishini bloklash:
+```
+<FilesMatch "\.(php|php5|phtml|exe|sh|py)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+```
+
+4. Fayl hajmini cheklash (`php.ini` sozlamalari):
+```
+upload_max_filesize = 2M
+post_max_size = 2M
+```
+
+Xulosa:
+✅ Xavfsizlik choralarini qo‘llash orqali zararli fayllarning yuklanishi oldi olinadi.
+⚠ Agar fayl yuklash xavfsizligi nazorat qilinmasa, bu katta xavflarga olib kelishi mumkin.
